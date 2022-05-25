@@ -10,9 +10,7 @@ class Chan:
         await self.channel.put(value)
 
     async def get(self):
-        if self.channel.empty():
-            return None
-        return await self.channel.get()
+        return None if self.channel.empty() else await self.channel.get()
 
     def __len__(self):
         return self.channel.qsize()

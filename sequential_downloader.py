@@ -29,11 +29,7 @@ def do(data: dict):
     print(f"Each size is {each_size} bytes")
     print(sections)
     for index, _ in enumerate(sections):
-        if index == 0:
-            sections[index][0] = 0
-        else:
-            sections[index][0] = sections[index - 1][1] + 1
-
+        sections[index][0] = 0 if index == 0 else sections[index - 1][1] + 1
         if index < data['TotalSections'] - 1:
             sections[index][1] = sections[index][0] + each_size
         else:

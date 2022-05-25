@@ -22,20 +22,18 @@ async def do(data: dict, session: aiohttp.ClientSession, tasks: list) -> (list, 
     print(f"Each size is {each_size} bytes")
     print(sections)
     for index, _ in enumerate(sections):
-        if index == 0:
-            sections[index][0] = 0
-        else:
-            sections[index][0] = sections[index - 1][1] + 1
-
+        sections[index][0] = 0 if index == 0 else sections[index - 1][1] + 1
         if index < data['TotalSections'] - 1:
             sections[index][1] = sections[index][0] + each_size
         else:
             sections[index][1] = int(size) - 1
 
     print(sections)
-    for index, section in enumerate(sections):
-        tasks.append(asyncio.create_task(download_section(index, section, data, session)))
-        # await asyncio.sleep(0.001)
+    tasks.extend(
+        asyncio.create_task(download_section(index, section, data, session))
+        for index, section in enumerate(sections)
+    )
+
     return sections, tasks
 
 
